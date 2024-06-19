@@ -8,9 +8,9 @@ use yii\base\Model;
 /**
  * Login form
  */
-class LoginForm extends Model
+class LoginFormAdmin extends Model
 {
-    public $username = 'john_watson';
+    public $username = 'maria_kh';
     public $password;
     public $rememberMe = true;
 
@@ -63,11 +63,15 @@ class LoginForm extends Model
         return false;
     }
 
-
+    /**
+     * Finds admin user by username
+     *
+     * @return Admin|null
+     */
     protected function getUser()
     {
         if ($this->_user === null) {
-            $this->_user = User::findByUsername($this->username);
+            $this->_user = Admin::findByUsername($this->username);
         }
 
         return $this->_user;

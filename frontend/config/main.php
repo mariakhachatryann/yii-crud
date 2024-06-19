@@ -21,8 +21,13 @@ return [
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the frontend
-            'name' => 'advanced-frontend',
+            // this is the name of the session cookie used for login on the backend
+            'name' => 'advanced-backend',
+            'cookieParams' => [
+                'httpOnly' => true,
+                'secure' => false
+            ],
+            'timeout' => 86400
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,

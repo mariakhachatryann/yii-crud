@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use common\models\Admin;
 use common\models\LoginForm;
+use common\models\LoginFormAdmin;
 use common\models\User;
 use Yii;
 use yii\filters\VerbFilter;
@@ -81,7 +83,7 @@ class SiteController extends Controller
 
         $this->layout = 'main';
 
-        $model = new LoginForm();
+        $model = new LoginFormAdmin();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->redirect(Url::toRoute(['book/index']));
         }

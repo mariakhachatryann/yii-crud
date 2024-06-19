@@ -32,10 +32,29 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'first_name',
             'last_name',
-            'biography:ntext',
-            'created_at',
-            'updated_at',
+            'biography:ntext'
         ],
     ]) ?>
+
+    <?= \yii\grid\GridView::widget([
+        'dataProvider' => new \yii\data\ArrayDataProvider([
+            'allModels' => $model->books,
+            'pagination' => false,
+        ]),
+        'columns' => [
+            'id',
+            'title',
+            'description:ntext',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view}',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a('View', ['book/view', 'id' => $model->id], ['class' => 'btn btn-primary']);
+                    },
+                ],
+            ],
+        ],
+    ]); ?>
 
 </div>

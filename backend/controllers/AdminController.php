@@ -12,14 +12,9 @@ class AdminController extends \yii\web\Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
+                'only' => ['logout', 'index', 'view', 'create', 'update', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
-                        'allow' => true,
-                        'roles' => ['?']
-                    ],
-                    [
-                        'actions' => ['logout', 'index', 'view', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

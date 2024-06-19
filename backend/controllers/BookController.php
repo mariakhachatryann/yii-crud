@@ -4,11 +4,7 @@ namespace backend\controllers;
 
 use common\models\Book;
 use app\models\BookSearch;
-use common\models\User;
-use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use Yii;
 use common\models\Author;
 
