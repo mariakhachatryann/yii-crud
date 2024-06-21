@@ -7,6 +7,7 @@ use app\models\BookSearch;
 use yii\web\NotFoundHttpException;
 use Yii;
 use common\models\Author;
+use yii\web\UploadedFile;
 
 /**
  * BookController implements the CRUD actions for Book model.
@@ -62,16 +63,37 @@ class BookController extends AdminController
     {
         $model = new Book();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $authorIds = $model->authorsIds;
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
 
-            if (!empty($authorIds)) {
-                $authors = Author::findAll($authorIds);
-                foreach ($authors as $author) {
-                    $model->link('authors', $author);
+            if ($model->validate()) {
+                if ($model->imageFile) {
+                    $imageName = 'book_' . time() . '.' . $model->imageFile->extension;
+                    $uploadPath = Yii::getAlias('@frontend/web/uploads/images/') . $imageName;
+
+                    if ($model->imageFile->saveAs($uploadPath)) {
+                        $model->imageFile = '/uploads/images/' . $imageName;
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Failed to upload image.');
+                        return $this->refresh();
+                    }
+                }
+
+                if ($model->save()) {
+                    $authorIds = $model->authorsIds;
+                    if (!empty($authorIds)) {
+                        $authors = Author::findAll($authorIds);
+                        foreach ($authors as $author) {
+                            $model->link('authors', $author);
+                        }
+                    }
+
+                    Yii::$app->session->setFlash('success', 'Book created successfully.');
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Failed to save book.');
                 }
             }
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [

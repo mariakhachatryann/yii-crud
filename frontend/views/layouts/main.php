@@ -38,8 +38,8 @@ $this->registerJsFile('https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Books', 'url' => ['/book/index']],
+        ['label' => 'Home', 'url' => ['site/index']],
+        ['label' => 'Books', 'url' => ['book/index']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];

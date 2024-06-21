@@ -17,7 +17,6 @@ use Yii;
 class Book extends \yii\db\ActiveRecord
 {
     public $authorsIds;
-
     /**
      * {@inheritdoc}
      */
@@ -36,7 +35,8 @@ class Book extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['publication_year', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 255],
-            [['authorsIds'], 'each', 'rule' => ['integer']]
+            [['authorsIds'], 'each', 'rule' => ['integer']],
+            [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -52,6 +52,7 @@ class Book extends \yii\db\ActiveRecord
             'publication_year' => 'Publication Year',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'imageFile' => 'Image',
         ];
     }
 

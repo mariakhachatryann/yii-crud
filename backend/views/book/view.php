@@ -57,4 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+<!--    --><?php //= Html::img($model->imageFile, ['alt' => 'Book Image']) ?>
+
 </div>

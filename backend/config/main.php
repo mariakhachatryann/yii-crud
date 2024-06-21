@@ -49,6 +49,12 @@ return [
             'showScriptName' => false,
         ],
 
+        'fileStorage' => [
+            'class' => 'yii\filesystem\FileStorage',
+            'basePath' => dirname(__DIR__, 2) . '/frontend/web/uploads/images',
+            'baseUrl' => '/uploads/images'
+        ],
+
     ],
     'params' => $params,
 ];

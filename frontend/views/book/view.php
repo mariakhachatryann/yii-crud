@@ -12,8 +12,39 @@ $isGuest = Yii::$app->user->isGuest;
 ?>
 <div class="book-view border m-3 p-3">
 
-    <h3><?= Html::encode($this->title) ?></h3>
+    <div class="row">
+        <div class="col-md-4">
+            <?php
+            $imageUrl = Yii::getAlias('@frontendWeb') . $model->imageFile;
+            echo Html::img($imageUrl, [
+                'class' => 'img-fluid rounded mb-3',
+                'alt' => 'Book Image',
+                'style' => 'max-width: 100%; height: auto;',
+            ]);
+            ?>
+        </div>
+        <div class="col-md-8">
+            <h3><?= Html::encode($this->title) ?></h3>
+            <h5>Description</h5>
+            <p><?= Html::encode($model->description) ?></p>
+            <p><strong>Publication Year:</strong> <?= Html::encode($model->publication_year) ?></p>
+        </div>
+    </div>
 
+    <h5>Authors</h5>
+
+    <?= GridView::widget([
+        'dataProvider' => new \yii\data\ArrayDataProvider([
+            'allModels' => $model->authors,
+            'pagination' => false,
+        ]),
+        'columns' => [
+            'id',
+            'first_name',
+            'last_name',
+        ],
+        'tableOptions' => ['class' => 'table table-striped'], // Optional: Add Bootstrap table styles
+    ]); ?>
 
     <?= GridView::widget([
         'dataProvider' => new \yii\data\ArrayDataProvider([
@@ -63,23 +94,7 @@ $isGuest = Yii::$app->user->isGuest;
                     'input' => !$isGuest,
                 ],
             ],
-
         ],
     ]) ?>
 
-    <h5>Author</h5>
-
-    <?= \yii\grid\GridView::widget([
-        'dataProvider' => new \yii\data\ArrayDataProvider([
-            'allModels' => $model->authors,
-            'pagination' => false,
-        ]),
-        'columns' => [
-            'id',
-            'first_name',
-            'last_name',
-        ],
-
-    ]); ?>
 </div>
-
