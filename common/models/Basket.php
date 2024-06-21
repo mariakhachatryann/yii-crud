@@ -20,7 +20,7 @@ class Basket extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'basket';
+        return 'baskets';
     }
 
     /**
@@ -29,11 +29,13 @@ class Basket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'book_id'], 'required'],
+            [['user_id', 'book_id', 'count'], 'required'],
             [['user_id', 'book_id'], 'integer'],
             [['user_id', 'book_id'], 'unique', 'targetAttribute' => ['user_id', 'book_id']],
             [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::class, 'targetAttribute' => ['book_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['count'], 'default', 'value' => 1],
+            [['count'], 'integer'],
         ];
     }
 
@@ -45,6 +47,7 @@ class Basket extends \yii\db\ActiveRecord
         return [
             'user_id' => 'User ID',
             'book_id' => 'Book ID',
+            'count' => 'Count',
         ];
     }
 

@@ -8,6 +8,7 @@ use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * BasketController implements the CRUD actions for Basket model.
@@ -61,18 +62,24 @@ class BasketController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate($id)
+    public function actionCreate()
     {
+        $id = Yii::$app->request->post('id');
+        $count = Yii::$app->request->post('count');
         $model = new Basket();
-
         $model->user_id = Yii::$app->user->id;
         $model->book_id = $id;
+        $model->count = $count;
 
-        $model->save();
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Item added to basket successfully.');
+        } else {
+            Yii::$app->session->setFlash('error', 'Failed to add item to basket.');
+            Yii::error('Failed to save Basket model: ' . json_encode($model->errors));
+        }
 
-        return $this->actionIndex();
+        return $this->redirect(['index']);
     }
-
     /**
      * Deletes an existing Basket model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

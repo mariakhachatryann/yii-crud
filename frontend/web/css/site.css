@@ -101,3 +101,7 @@ a.desc:after {
 {
     text-decoration: none;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}

@@ -47,6 +47,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
+                'attribute' => 'Count',
+                'value' => function ($model) {
+                    return $model->count;
+                },
+            ],
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Basket $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'user_id' => $model->user_id, 'book_id' => $model->book_id]);

@@ -5,22 +5,23 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%basket}}`.
  */
-class m240619_084614_create_basket_table extends Migration
+class m240619_084614_create_baskets_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%basket}}', [
+        $this->createTable('{{%baskets}}', [
             'user_id' => $this->integer(),
             'book_id' => $this->integer(),
+            'count' => $this->integer(),
             'PRIMARY KEY(user_id, book_id)',
         ]);
 
         $this->addForeignKey(
             'fk_basket_user_id',
-            '{{%basket}}',
+            '{{%baskets}}',
             'user_id',
             '{{%user}}',
             'id',
@@ -30,7 +31,7 @@ class m240619_084614_create_basket_table extends Migration
 
         $this->addForeignKey(
             'fk_basket_book_id',
-            '{{%basket}}',
+            '{{%baskets}}',
             'book_id',
             '{{%books}}',
             'id',
