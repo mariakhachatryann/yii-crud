@@ -112,23 +112,45 @@ class BookController extends AdminController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $authorIds = $model->authorsIds;
-            $model->unlinkAll('authors', true);
-            if (!empty($authorIds)) {
-                $authors = Author::findAll($authorIds);
-                foreach ($authors as $author) {
-                    $model->link('authors', $author);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+
+            if ($model->validate()) {
+                if ($model->imageFile) {
+                    $imageName = 'book_' . time() . '.' . $model->imageFile->extension;
+                    $uploadPath = Yii::getAlias('@frontend/web/uploads/images/') . $imageName;
+
+                    if ($model->imageFile->saveAs($uploadPath)) {
+                        $model->imageFile = '/uploads/images/' . $imageName;
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Failed to upload image.');
+                        return $this->refresh();
+                    }
+                }
+
+                if ($model->save()) {
+                    $model->unlinkAll('authors', true);
+
+                    $authorIds = $model->authorsIds;
+                    if (!empty($authorIds)) {
+                        $authors = Author::findAll($authorIds);
+                        foreach ($authors as $author) {
+                            $model->link('authors', $author);
+                        }
+                    }
+
+                    Yii::$app->session->setFlash('success', 'Book updated successfully.');
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Failed to update book.');
                 }
             }
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
     }
-
     /**
      * Deletes an existing Book model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

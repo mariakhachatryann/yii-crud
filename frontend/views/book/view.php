@@ -25,8 +25,11 @@ $isGuest = Yii::$app->user->isGuest;
             <h5 class="card-title"><?= Html::encode($model->title) ?></h5>
             <p class="card-text"><?= Html::encode($model->description) ?></p>
             <p class="card-text"><strong>Authors:</strong>
-                <?php foreach ($model->authors as $author): ?>
+                <?php foreach ($model->authors as $index => $author): ?>
                     <?= Html::a(Html::encode($author->first_name . ' ' . $author->last_name)) ?>
+                    <?php if ($index !== count($model->authors) - 1): ?>
+                        <?= ',' ?>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </p>
             <p class="card-text"><strong>Publication Year:</strong> <?= Html::encode($model->publication_year) ?></p>
