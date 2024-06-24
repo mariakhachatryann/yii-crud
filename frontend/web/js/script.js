@@ -3,7 +3,7 @@ function addToBasket(id) {
     var count = $('input.count-input[data-id="' + id + '"]').val();
 
     $.ajax({
-        url: "index.php?r=basket/create",
+        url: "../basket/create",
         type: 'POST',
         data: {
             'id': id,

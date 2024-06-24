@@ -1,8 +1,6 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
 use yii\web\View;
 use yii\widgets\ListView;
 
@@ -23,5 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => 'view',
+        'layout' => "{items}",
+        'options' => [
+            'class' => 'row row-cols-1 row-cols-md-3 g-4'
+        ],
     ]) ?>
 </div>
