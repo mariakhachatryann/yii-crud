@@ -17,6 +17,7 @@ class m240617_140342_create_authors_table extends Migration
             'first_name' => $this->string()->notNull(),
             'last_name' => $this->string()->notNull(),
             'biography' => $this->text(),
+            'user_id',
             'created_at' => $this->integer(),
             'updated_at' => $this->integer()
         ]);

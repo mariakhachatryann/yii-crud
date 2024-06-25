@@ -34,7 +34,7 @@ class Book extends \yii\db\ActiveRecord
             [['title'], 'required'],
             [['description'], 'string'],
             [['publication_year', 'created_at', 'updated_at'], 'integer'],
-            [['title'], 'string', 'max' => 255],
+            [['price'], 'integer'],
             [['authorsIds'], 'each', 'rule' => ['integer']],
             [['imageFile'], 'file', 'extensions' => 'png, jpg, jpeg'],
         ];
@@ -50,6 +50,7 @@ class Book extends \yii\db\ActiveRecord
             'title' => 'Title',
             'description' => 'Description',
             'publication_year' => 'Publication Year',
+            'price' => 'Price',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'imageFile' => 'Image',

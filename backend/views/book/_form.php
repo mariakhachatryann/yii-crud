@@ -18,6 +18,8 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
+    <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'authorsIds')->widget(Select2::class, [
         'data' => \common\models\Author::find()
             ->select(['CONCAT(first_name, " ", last_name) AS full_name', 'id'])

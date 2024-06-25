@@ -28,6 +28,8 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+    const USER = 'user';
+    const AUTHOR = 'author';
 
 
     /**
@@ -210,4 +212,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public function getAuthor()
+    {
+        return $this->hasOne(Author::class, ['user_id' => 'id']);
+    }
+
 }

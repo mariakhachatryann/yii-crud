@@ -9,15 +9,14 @@ use common\models\Book;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
+use common\models\User;
 class BookController extends \yii\web\Controller
 {
     public function actionIndex()
     {
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Book::find(),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
+            'query' => Book::find()
         ]);
 
         return $this->render('index', [

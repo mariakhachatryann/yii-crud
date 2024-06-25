@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use Yii;
+use common\models\User;
 
 /**
  * AuthorController implements the CRUD actions for Author model.
@@ -61,9 +62,26 @@ class AuthorController extends AdminController
     public function actionCreate()
     {
         $model = new Author();
+        $user = new User;
+        $authManager = Yii::$app->authManager;
+        $userRole = $authManager->getRole(User::AUTHOR);
+
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post())) {
+                $user->username = $model->first_name . '_' . $model->last_name;
+                $user->email = $model->last_name . '@mail.com';
+                $user->role = User::AUTHOR;
+                $user->status = User::STATUS_ACTIVE;
+                $user->setPassword($model->first_name . '_' . $model->last_name . '$$$');
+                $user->generateAuthKey();
+                $user->generateEmailVerificationToken();
+                $user->save();
+                $authManager->assign($userRole, $user->id);
+
+                $model->user_id = $user->id;
+                $model->save();
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

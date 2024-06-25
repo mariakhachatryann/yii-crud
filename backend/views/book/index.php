@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php endforeach; ?>
                         </p>
                         <p class="card-text"><strong>Publication Year:</strong> <?= Html::encode($model->publication_year) ?></p>
+                        <p class="card-text"><strong>Price:</strong> $<?= Html::encode($model->price) ?></p>
                     </div>
                     <div class="card-footer">
                         <?= Html::a('View Details', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
