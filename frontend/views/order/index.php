@@ -11,6 +11,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1 class="mt-4"><?= Html::encode($this->title) ?></h1>
 
     <?php foreach ($orders as $order): ?>
+        <?php
+            $totalAmount = 0;
+            foreach ($order->orderItems as $item) {
+                $totalAmount += $item->transaction->amount;
+            }
+        ?>
         <div class="card mb-4">
             <div class="card-header bg-primary text-white">
                 <div class="d-flex justify-content-between align-items-center">
@@ -18,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <strong>Order #<?= Html::encode($order->id) ?></strong>
                     </div>
                     <div>
-                        Amount: <?= Yii::$app->formatter->asCurrency($order->transaction->amount) ?>
+                        Amount: <?= Yii::$app->formatter->asCurrency($totalAmount) ?>
                     </div>
                 </div>
             </div>

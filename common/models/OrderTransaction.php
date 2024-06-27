@@ -30,8 +30,8 @@ class OrderTransaction extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['amount', 'order_id'], 'integer'],
-            [['order_id'], 'required'],
+            [['amount', 'order_item_id'], 'integer'],
+            [['order_item_id'], 'required'],
         ];
     }
 
@@ -42,7 +42,7 @@ class OrderTransaction extends \yii\db\ActiveRecord
     {
         return [
             'amount' => 'Amount',
-            'order_id' => 'Order ID',
+            'order_item_id' => 'Order ID',
         ];
     }
 

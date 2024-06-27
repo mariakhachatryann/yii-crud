@@ -46,6 +46,11 @@ class OrderController extends \yii\web\Controller
                 throw new \Exception('Failed to save order item for book ID: ' . $cartItem->book_id);
             }
 
+            $orderTransaction = new OrderTransaction();
+            $orderTransaction->order_item_id = $orderItem->id;
+            $orderTransaction->amount = $orderItem->book->price * $orderItem->quantity;
+            $orderTransaction->save();
+
             $totalAmount += $orderItem->book->price * $orderItem->quantity;
             $cartItem->delete();
 
@@ -59,14 +64,10 @@ class OrderController extends \yii\web\Controller
                 $author->balance += $sharePerAuthor;
                 $author->save();
             }
+
         }
 
         $order->save();
-
-        $orderTransaction = new OrderTransaction();
-        $orderTransaction->order_id = $order->id;
-        $orderTransaction->amount = $totalAmount;
-        $orderTransaction->save();
 
         Yii::$app->session->setFlash('success', 'Checkout successful! Order created.');
 

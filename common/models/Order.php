@@ -10,7 +10,6 @@ use Yii;
  * @property int $id
  * @property int|null $user_id
  * @property int|null $book_id
- *
  * @property User $user
  */
 class Order extends \yii\db\ActiveRecord
@@ -66,8 +65,5 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
-    public function getTransaction()
-    {
-        return $this->hasOne(OrderTransaction::class, ['order_id' => 'id']);
-    }
+
 }

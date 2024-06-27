@@ -71,5 +71,8 @@ class OrderItems extends \yii\db\ActiveRecord
         return $this->hasOne(Order::class, ['id' => 'order_id']);
     }
 
-
+    public function getTransaction()
+    {
+        return $this->hasOne(OrderTransaction::class, ['order_item_id' => 'id']);
+    }
 }
