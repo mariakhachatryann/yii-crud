@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 /** @var yii\web\View $this */
 /** @var app\models\AuthorSearch $searchModel */
@@ -36,11 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'Books',
                 'value' => function ($model) {
-                    $bookTitles = [];
-                    foreach ($model->books as $book) {
-                        $bookTitles[] = $book->title;
-                    }
-                    return implode(', ', $bookTitles);
+                    return implode(', ', ArrayHelper::getColumn($model->books, 'title'));
                 },
             ],
             [

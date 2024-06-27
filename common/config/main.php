@@ -13,5 +13,10 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'nullDisplay' => '',
+            'currencyCode' => 'USD',
+        ],
     ],
 ];

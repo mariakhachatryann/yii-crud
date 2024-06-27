@@ -13,8 +13,8 @@ class m240624_142327_add_user_id_to_authors extends Migration
     public function safeUp()
     {
         $this->addColumn('{{%authors}}', 'user_id', $this->integer()->notNull());
+        $this->addColumn('{{%authors}}', 'balance', $this->integer()->notNull());
 
-        // Add foreign key constraint if needed
         $this->addForeignKey(
             'fk-authors-user_id',
             '{{%authors}}',
@@ -30,10 +30,8 @@ class m240624_142327_add_user_id_to_authors extends Migration
      */
     public function safeDown()
     {
-        // Drop foreign key first if added
         $this->dropForeignKey('fk-authors-user_id', '{{%authors}}');
 
-        // Drop the column
         $this->dropColumn('{{%authors}}', 'user_id');
     }
 

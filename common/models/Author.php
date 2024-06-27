@@ -71,4 +71,21 @@ class Author extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Book::class, ['id' => 'book_id'])->viaTable('author_book', ['author_id' => 'id']);
     }
+
+    public function getBookIds()
+    {
+        return $this->hasMany(Book::class, ['id' => 'book_id'])
+            ->viaTable('author_book', ['author_id' => 'id'])
+            ->select('id')
+            ->column();
+    }
+
+
+    public function getOrders()
+    {
+        return Order::find()
+            ->joinWith('orderItems.book')
+            ->andWhere(['in', 'order_items.book_id', $this->getBookIds()])
+            ->distinct();
+    }
 }

@@ -2,11 +2,11 @@
 
 namespace frontend\controllers;
 
-use common\models\Author;
-use common\models\Basket;
+use common\models\Cart;
+use common\models\Order;
 use Yii;
 
-class AuthorController extends \backend\controllers\BookController
+class AuthorController extends \common\helpers\BookCrudActions
 {
     public $layout = 'main';
 
@@ -38,45 +38,64 @@ class AuthorController extends \backend\controllers\BookController
     {
         $user = Yii::$app->user->identity;
         $author = $user->author;
+
+        // Fetch all books associated with the author
         $books = $author->getBooks()->all();
 
+        // Extract book IDs for filtering orders
         $bookIds = [];
         foreach ($books as $book) {
             $bookIds[] = $book->id;
         }
 
-        $basketItems = Basket::find()->where(['book_id' => $bookIds])->all();
+        // Retrieve orders where any book associated with the author has been ordered
+        $orders = Order::find()
+            ->with('orderItems.book')
+            ->joinWith('orderItems.book')
+            ->andWhere(['in', 'order_items.book_id', $bookIds])
+            ->distinct()
+            ->all();
 
-        $booksInBasket = [];
+        $ordersData = [];
 
-        foreach ($basketItems as $item) {
-            $book = $item->book;
-            if ($book) {
-                $authors = $book->getAuthors()->all();
-                $numberOfAuthors = count($authors);
-                $price = $book->price;
+        foreach ($orders as $order) {
+            $orderDetails = [
+                'orderId' => $order->id,
+                'orderItems' => [],
+            ];
 
-                if ($numberOfAuthors > 1) {
-                    $sharePerAuthor = $price / $numberOfAuthors;
-                } else {
-                    $sharePerAuthor = $price;
+            foreach ($order->orderItems as $item) {
+                $book = $item->book;
+
+                // Ensure the book is associated with the author
+                if (in_array($book->id, $bookIds)) {
+                    $numberOfAuthors = $book->getAuthors()->count();
+                    $price = $book->price;
+
+                    // Calculate share per author based on number of authors
+                    if ($numberOfAuthors > 1) {
+                        $sharePerAuthor = ($price * $item->quantity) / $numberOfAuthors;
+                    } else {
+                        $sharePerAuthor = $price * $item->quantity;
+                    }
+
+                    $orderDetails['orderItems'][] = [
+                        'bookId' => $book->id,
+                        'title' => $book->title,
+                        'description' => $book->description,
+                        'price' => $price,
+                        'quantity' => $item->quantity,
+                        'authorShare' => $sharePerAuthor,
+                        'imageFile' => $book->imageFile,
+                    ];
                 }
-
-                $booksInBasket[] = [
-                    'id' => $book->id,
-                    'title' => $book->title,
-                    'description' => $book->description,
-                    'price' => $book->price,
-                    'authorShare' => $sharePerAuthor,
-                    'publicationYear' => $book->publication_year,
-                    'imageFile' => $book->imageFile,
-                    'count' => Basket::findOne(['book_id' => $book->id])->count
-                ];
             }
+
+            $ordersData[] = $orderDetails;
         }
 
         return $this->render('orders', [
-            'booksInBasket' => $booksInBasket,
+            'ordersData' => $ordersData,
         ]);
     }
 

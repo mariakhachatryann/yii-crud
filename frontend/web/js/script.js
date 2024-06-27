@@ -1,13 +1,13 @@
-function addToBasket(id) {
+function addToCart(id) {
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
-    var count = $('input.count-input[data-id="' + id + '"]').val();
+    var quantity = $('input.count-input[data-id="' + id + '"]').val();
 
     $.ajax({
-        url: "../basket/create",
+        url: "../cart/create",
         type: 'POST',
         data: {
             'id': id,
-            'count': count,
+            'quantity': quantity,
             '_csrf': csrfToken
         },
         success: function(response) {

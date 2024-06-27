@@ -2,14 +2,14 @@
 
 namespace frontend\models;
 
-use common\models\Basket;
+use common\models\Cart;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * BasketSearch represents the model behind the search form of `common\models\Basket`.
+ * CartSearch represents the model behind the search form of `common\models\Cart`.
  */
-class BasketSearch extends Basket
+class CartSearch extends Cart
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ class BasketSearch extends Basket
      */
     public function search($params)
     {
-        $query = Basket::find();
+        $query = Cart::find();
 
         // add conditions that should always apply here
 

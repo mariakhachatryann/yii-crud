@@ -3,24 +3,27 @@
 namespace common\models;
 
 use Yii;
+use yii\db\Transaction;
 
 /**
- * This is the model class for table "basket".
+ * This is the model class for table "order_items".
  *
- * @property int $user_id
- * @property int $book_id
+ * @property int $id
+ * @property int|null $book_id
+ * @property int|null $order_id
+ * @property int|null $quantity
  *
  * @property Book $book
- * @property User $user
+ * @property Order $order
  */
-class Basket extends \yii\db\ActiveRecord
+class OrderItems extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'baskets';
+        return 'order_items';
     }
 
     /**
@@ -29,13 +32,9 @@ class Basket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'book_id', 'count'], 'required'],
-            [['user_id', 'book_id'], 'integer'],
-            [['user_id', 'book_id'], 'unique', 'targetAttribute' => ['user_id', 'book_id']],
+            [['book_id', 'order_id', 'quantity'], 'integer'],
             [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::class, 'targetAttribute' => ['book_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
-            [['count'], 'default', 'value' => 1],
-            [['count'], 'integer'],
+            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::class, 'targetAttribute' => ['order_id' => 'id']],
         ];
     }
 
@@ -45,9 +44,10 @@ class Basket extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => 'User ID',
+            'id' => 'ID',
             'book_id' => 'Book ID',
-            'count' => 'Count',
+            'order_id' => 'Order ID',
+            'quantity' => 'Quantity',
         ];
     }
 
@@ -62,12 +62,14 @@ class Basket extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[User]].
+     * Gets query for [[Order]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getOrder()
     {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
+        return $this->hasOne(Order::class, ['id' => 'order_id']);
     }
+
+
 }
