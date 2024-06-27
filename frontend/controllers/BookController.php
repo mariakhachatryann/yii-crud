@@ -2,9 +2,6 @@
 
 namespace frontend\controllers;
 
-use app\models\BookSearch;
-use common\models\Author;
-use common\models\Basket;
 use common\models\Book;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;

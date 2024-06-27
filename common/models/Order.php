@@ -10,7 +10,6 @@ use Yii;
  * @property int $id
  * @property int|null $user_id
  * @property int|null $book_id
- * @property int|null $count
  *
  * @property User $user
  */

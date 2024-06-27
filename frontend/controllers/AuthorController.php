@@ -2,9 +2,9 @@
 
 namespace frontend\controllers;
 
-use common\models\Cart;
 use common\models\Order;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class AuthorController extends \common\helpers\BookCrudActions
 {
@@ -15,7 +15,8 @@ class AuthorController extends \common\helpers\BookCrudActions
         return $this->render('index');
     }
 
-    public function actionBooks() {
+    public function actionBooks()
+    {
 
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['site/login']);
@@ -39,16 +40,9 @@ class AuthorController extends \common\helpers\BookCrudActions
         $user = Yii::$app->user->identity;
         $author = $user->author;
 
-        // Fetch all books associated with the author
         $books = $author->getBooks()->all();
+        $bookIds = ArrayHelper::getColumn($books, 'id');
 
-        // Extract book IDs for filtering orders
-        $bookIds = [];
-        foreach ($books as $book) {
-            $bookIds[] = $book->id;
-        }
-
-        // Retrieve orders where any book associated with the author has been ordered
         $orders = Order::find()
             ->with('orderItems.book')
             ->joinWith('orderItems.book')
@@ -67,17 +61,11 @@ class AuthorController extends \common\helpers\BookCrudActions
             foreach ($order->orderItems as $item) {
                 $book = $item->book;
 
-                // Ensure the book is associated with the author
                 if (in_array($book->id, $bookIds)) {
                     $numberOfAuthors = $book->getAuthors()->count();
                     $price = $book->price;
 
-                    // Calculate share per author based on number of authors
-                    if ($numberOfAuthors > 1) {
-                        $sharePerAuthor = ($price * $item->quantity) / $numberOfAuthors;
-                    } else {
-                        $sharePerAuthor = $price * $item->quantity;
-                    }
+                    $sharePerAuthor = ($price * $item->quantity) / $numberOfAuthors;
 
                     $orderDetails['orderItems'][] = [
                         'bookId' => $book->id,

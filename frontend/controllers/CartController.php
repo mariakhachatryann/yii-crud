@@ -3,7 +3,6 @@
 namespace frontend\controllers;
 
 use Yii;
-use common\models\Book;
 use common\models\Cart;
 use frontend\models\CartSearch;
 use yii\filters\VerbFilter;
