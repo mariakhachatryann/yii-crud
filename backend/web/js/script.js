@@ -1,17 +1,17 @@
-function addToCart(id) {
+function statusChange(id, selectedStatus) {
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
-    var quantity = $('input.count-input[data-id="' + id + '"]').val();
 
     $.ajax({
-        url: "../cart/create",
+        url: "../order/status",
         type: 'POST',
         data: {
+            '_csrf': csrfToken,
             'id': id,
-            'quantity': quantity,
-            '_csrf': csrfToken
+            'selectedStatus': selectedStatus
         },
         success: function(response) {
             console.log('AJAX request successful');
+            console.log(response);
         },
         error: function(xhr, status, error) {
             console.error('Error occurred: ' + error);
@@ -19,3 +19,4 @@ function addToCart(id) {
     });
 }
 
+console.log('connected')

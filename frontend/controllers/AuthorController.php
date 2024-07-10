@@ -86,5 +86,4 @@ class AuthorController extends \common\helpers\BookCrudActions
             'ordersData' => $ordersData,
         ]);
     }
-
 }

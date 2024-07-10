@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "order".
@@ -12,35 +13,42 @@ use Yii;
  * @property int|null $book_id
  * @property User $user
  */
-class Order extends \yii\db\ActiveRecord
+class Order extends ActiveRecord
 {
-    /**
-     * {@inheritdoc}
-     */
+    const STATUS_PENDING = 0;
+    const STATUS_PAID = 1;
+    const STATUS_PROCESSING = 2;
+    const STATUS_COMPLETED = 3;
+    const STATUS_CANCELLED = 4;
+    const statuses = [
+        self::STATUS_PENDING => 'Pending',
+        self::STATUS_PAID => 'Paid',
+        self::STATUS_PROCESSING => 'Processing',
+        self::STATUS_COMPLETED => 'Completed',
+        self::STATUS_CANCELLED => 'Cancelled',
+    ];
+
     public static function tableName()
     {
         return 'orders';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
+            [['user_id', 'status'], 'integer'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['status'], 'in', 'range' => array_keys(self::statuses)],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
+            'status' => 'Status'
         ];
     }
 
@@ -64,6 +72,4 @@ class Order extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
-
-
 }

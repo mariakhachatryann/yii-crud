@@ -36,6 +36,5 @@ $this->params['breadcrumbs'][] = $this->title;
             <p class="card-text"><strong>Price:</strong> $<?= Html::encode($model->price) ?></p>
         </div>
 
-
     </div>
 </div>

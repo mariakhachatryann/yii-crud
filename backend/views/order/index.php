@@ -1,11 +1,14 @@
 <?php
-/** @var yii\web\View $this */
-/** @var common\models\Order[] $orders */
-
 use yii\helpers\Html;
+use common\models\Order;
+use frontend\assets\AppAsset;
 
-$this->title = 'My Orders';
+$this->title = 'Orders';
 $this->params['breadcrumbs'][] = $this->title;
+
+$options = Order::statuses;
+$selectOptions = Html::renderSelectOptions(null, $options);
+$this->registerJsFile('js/script.js', ['depends' => [\yii\web\JqueryAsset::class]]);
 ?>
 
 <div class="container">
@@ -26,6 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>
                     <div>
                         Amount: <?= Yii::$app->formatter->asCurrency($totalAmount) ?>
+                    </div>
+                    <div class="d-flex gap-3 align-items-center">
+                        Status: <?= Html::dropDownList('dropdown', $order->status, $options, [
+                                'prompt' => 'Select Option',
+                                'class' => 'statusChange form-select form-select-sm',
+                                'onchange' => 'statusChange(' . $order->id . ', this.value)'
+                        ]); ?>
                     </div>
                 </div>
             </div>

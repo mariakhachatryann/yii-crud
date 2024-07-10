@@ -57,7 +57,7 @@ class Author extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
-        public function getAuthorBooks()
+    public function getAuthorBooks()
     {
         return $this->hasMany(AuthorBook::class, ['author_id' => 'id']);
     }
@@ -84,8 +84,29 @@ class Author extends \yii\db\ActiveRecord
     public function getOrders()
     {
         return Order::find()
-            ->joinWith('orderItems.book')
+            ->joinWith('orderItems')
             ->andWhere(['in', 'order_items.book_id', $this->getBookIds()])
             ->distinct();
+    }
+
+    public function updateBalance()
+    {
+        $totalAmount = 0;
+        $orders = $this->getOrders()->all();
+
+        foreach ($orders as $order) {
+            $orderItems = $order->getOrderItems()->andWhere(['book_id' => $this->getBookIds()])->all();
+
+            foreach ($orderItems as $orderItem) {
+                $orderTotal = OrderTransaction::find()
+                    ->andWhere(['order_item_id' => $orderItem->id])
+                    ->sum('amount');
+
+                $totalAmount += $orderTotal;
+            }
+        }
+
+        $this->balance = $totalAmount;
+        $this->save();
     }
 }

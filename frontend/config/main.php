@@ -48,6 +48,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'admin/order/statusChange' => 'admin/order/status-change'
             ],
         ]
     ],

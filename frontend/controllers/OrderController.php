@@ -6,6 +6,7 @@ use Yii;
 use common\models\Order;
 use common\models\OrderTransaction;
 use common\models\OrderItems;
+use common\models\OrderAddresses;
 
 class OrderController extends \yii\web\Controller
 {
@@ -24,53 +25,51 @@ class OrderController extends \yii\web\Controller
     public function actionCheckout()
     {
         $user = Yii::$app->user->identity;
+        $orderAddress = new OrderAddresses();
 
-        $cartItems = $user->cart;
+        if ($orderAddress->load(Yii::$app->request->post()) && $orderAddress->validate()) {
+            $cartItems = $user->cart;
 
-        $order = new Order();
-        $order->user_id = $user->id;
+            $order = new Order();
+            $order->user_id = $user->id;
+            $order->save();
 
-        if (!$order->save()) {
-            throw new \Exception('Failed to save order.');
-        }
+            Yii::$app->session->set('orderId', $order->id);
 
-        $totalAmount = 0;
+            foreach ($cartItems as $cartItem) {
+                $orderItem = new OrderItems();
+                $orderItem->order_id = $order->id;
+                $orderItem->book_id = $cartItem->book_id;
+                $orderItem->quantity = $cartItem->quantity;
+                $orderItem->save();
 
-        foreach ($cartItems as $cartItem) {
-            $orderItem = new OrderItems();
-            $orderItem->order_id = $order->id;
-            $orderItem->book_id = $cartItem->book_id;
-            $orderItem->quantity = $cartItem->quantity;
+                $orderTransaction = new OrderTransaction();
+                $orderTransaction->order_item_id = $orderItem->id;
+                $orderTransaction->amount = $orderItem->book->price * $orderItem->quantity;
+                $orderTransaction->save();
 
-            if (!$orderItem->save()) {
-                throw new \Exception('Failed to save order item for book ID: ' . $cartItem->book_id);
+                $cartItem->delete();
+
+                $authors = $orderItem->book->getAuthors()->all();
+                foreach ($authors as $author) {
+                    $author->updateBalance();
+                }
             }
 
-            $orderTransaction = new OrderTransaction();
-            $orderTransaction->order_item_id = $orderItem->id;
-            $orderTransaction->amount = $orderItem->book->price * $orderItem->quantity;
-            $orderTransaction->save();
+            $orderAddress->order_id = $order->id;
 
-            $totalAmount += $orderItem->book->price * $orderItem->quantity;
-            $cartItem->delete();
-
-            $authors = $orderItem->book->getAuthors()->all();
-            $numberOfAuthors = count($authors);
-            $price = $orderItem->book->price;
-
-            $sharePerAuthor = ($price * $orderItem->quantity) / $numberOfAuthors;
-
-            foreach ($authors as $author) {
-                $author->balance += $sharePerAuthor;
-                $author->save();
+            if (!$orderAddress->save()) {
+                Yii::$app->session->setFlash('error', 'Failed to save order address.');
+            } else {
+                Yii::$app->session->setFlash('success', 'Order address saved successfully.');
             }
 
+            return $this->redirect(['cart/index']);
         }
 
-        $order->save();
-
-        Yii::$app->session->setFlash('success', 'Checkout successful! Order created.');
-
-        return $this->redirect(['cart/index']);
+        return $this->render('details', [
+            'model' => $orderAddress,
+        ]);
     }
+
 }
