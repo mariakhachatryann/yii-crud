@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\elasticsearch\Query;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "books".
@@ -14,12 +16,43 @@ use Yii;
  * @property int|null $created_at
  * @property int|null $updated_at
  */
-class Book extends \yii\db\ActiveRecord
+class Book extends \yii\elasticsearch\ActiveRecord
 {
     public $authorsIds;
     /**
      * {@inheritdoc}
      */
+    public static function indexName()
+    {
+        return 'books';
+    }
+
+    public static function typeName()
+    {
+        return '_doc';
+    }
+
+    public static function mapping()
+    {
+        return [
+            static::type() => [
+                'properties' => [
+                    'id' => ['type' => 'text'],
+                    'title' => ['type' => 'text'],
+                    'description' => ['type' => 'text'],
+                    'publication_year' => ['type' => 'integer'],
+                    'authors' => [
+                        'type' => 'nested',
+                        'properties' => [
+                            'id' => ['type' => 'integer'],
+                            'name' => ['type' => 'keyword'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public static function tableName()
     {
         return 'books';
@@ -54,6 +87,21 @@ class Book extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'imageFile' => 'Image',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'id',
+            'title',
+            'description',
+            'publication_year',
+            'price',
+            'created_at',
+            'updated_at',
+            'imageFile',
+            'authorsIds',
         ];
     }
 

@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\Book;
+use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
@@ -11,7 +12,6 @@ class BookController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-
         $dataProvider = new ActiveDataProvider([
             'query' => Book::find()
         ]);
@@ -36,6 +36,21 @@ class BookController extends \yii\web\Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionSearch()
+    {
+        $title = Yii::$app->request->get('title');
+        $results = Book::find()->query(['match' => ['title' => $title]])->all();
+        $dataProvider = new \yii\data\ArrayDataProvider([
+            'allModels' => $results,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+        ]);
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
 }

@@ -10,7 +10,6 @@ use yii\db\ActiveRecord;
  *
  * @property int $id
  * @property int|null $user_id
- * @property int|null $book_id
  * @property User $user
  */
 class Order extends ActiveRecord

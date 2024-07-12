@@ -28,9 +28,9 @@ class Cart extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'book_id', 'quantity'], 'required'],
-            [['user_id', 'book_id'], 'integer'],
+            [['user_id'], 'integer'],
+            [['book_id'], 'string'],
             [['user_id', 'book_id'], 'unique', 'targetAttribute' => ['user_id', 'book_id']],
-            [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::class, 'targetAttribute' => ['book_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
             [['quantity'], 'default', 'value' => 1],
             [['quantity'], 'integer'],
@@ -54,10 +54,10 @@ class Cart extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getBook()
-    {
-        return $this->hasOne(Book::class, ['id' => 'book_id']);
-    }
+//    public function getBook()
+//    {
+//        return $this->hasOne(Book::class, ['id' => 'book_id']);
+//    }
 
     /**
      * Gets query for [[User]].

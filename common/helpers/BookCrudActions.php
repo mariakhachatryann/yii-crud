@@ -71,7 +71,7 @@ class BookCrudActions extends \yii\web\Controller
                     }
 
                     Yii::$app->session->setFlash('success', 'Book created successfully.');
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    return $this->redirect(['view', 'id' => $model->_id]);
                 } else {
                     Yii::$app->session->setFlash('error', 'Failed to save book.');
                 }
@@ -143,7 +143,6 @@ class BookCrudActions extends \yii\web\Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
@@ -156,7 +155,7 @@ class BookCrudActions extends \yii\web\Controller
      */
     protected function findModel($id)
     {
-        if (($model = Book::findOne(['id' => $id])) !== null) {
+        if (($model = Book::findOne(['_id' => $id])) !== null) {
             return $model;
         }
 

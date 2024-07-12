@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Book;
 use Yii;
 use common\models\Order;
 use common\models\OrderTransaction;
@@ -10,7 +11,6 @@ use common\models\OrderAddresses;
 
 class OrderController extends \yii\web\Controller
 {
-
     public function actionIndex()
     {
         $user = Yii::$app->user->identity;
@@ -45,15 +45,17 @@ class OrderController extends \yii\web\Controller
 
                 $orderTransaction = new OrderTransaction();
                 $orderTransaction->order_item_id = $orderItem->id;
-                $orderTransaction->amount = $orderItem->book->price * $orderItem->quantity;
+
+                $book = Book::findOne(['_id' => $orderItem->book_id]);
+                $orderTransaction->amount = $book->price * $orderItem->quantity;
                 $orderTransaction->save();
 
                 $cartItem->delete();
 
-                $authors = $orderItem->book->getAuthors()->all();
-                foreach ($authors as $author) {
-                    $author->updateBalance();
-                }
+//                $authors = $orderItem->book->getAuthors()->all();
+//                foreach ($authors as $author) {
+//                    $author->updateBalance();
+//                }
             }
 
             $orderAddress->order_id = $order->id;

@@ -3,6 +3,7 @@
 /** @var common\models\Order[] $orders */
 
 use yii\helpers\Html;
+use common\models\Book;
 
 $this->title = 'My Orders';
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,19 +34,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h5 class="card-title">Ordered Items:</h5>
                 <ul class="list-group list-group-flush">
                     <?php foreach ($order->orderItems as $item): ?>
+                        <?php $book = Book::findOne(['_id' => $item->book_id]); ?>
+
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-md-2">
-                                    <?= Html::img($item->book->imageFile, ['class' => 'img-fluid rounded']) ?>
+                                    <?= Html::img($book->imageFile, ['class' => 'img-fluid rounded']) ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <h5><?= Html::encode($item->book->title) ?></h5>
-                                    <p><?= Html::encode($item->book->description) ?></p>
+                                    <h5><?= Html::encode($book->title) ?></h5>
+                                    <p><?= Html::encode($book->description) ?></p>
                                 </div>
                                 <div class="col-md-4 d-flex justify-content-between">
                                     <p>Quantity: <?= Html::encode($item->quantity) ?></p>
-                                    <p>Price: <?= Yii::$app->formatter->asCurrency($item->book->price) ?></p>
-                                    <p>Total: <?= Yii::$app->formatter->asCurrency($item->book->price * $item->quantity) ?></p>
+                                    <p>Price: <?= Yii::$app->formatter->asCurrency($book->price) ?></p>
+                                    <p>Total: <?= Yii::$app->formatter->asCurrency($book->price * $item->quantity) ?></p>
                                 </div>
                             </div>
                         </li>

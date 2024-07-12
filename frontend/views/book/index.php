@@ -16,7 +16,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="book-index">
 
-    <h1 class="mb-3"><?= Html::encode($this->title) ?></h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-3"><?= Html::encode($this->title) ?></h1>
+        <form class="d-flex" action="/book/search" method="get">
+            <input name="title" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,

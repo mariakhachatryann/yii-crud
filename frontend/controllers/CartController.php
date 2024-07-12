@@ -77,6 +77,7 @@ class CartController extends Controller
             $model->user_id = $user->id;
             $model->book_id = $id;
             $model->quantity = $quantity;
+
         } else {
             $cartItem->quantity += $quantity;
             $model = $cartItem;

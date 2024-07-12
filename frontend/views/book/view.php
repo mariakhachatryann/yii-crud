@@ -39,12 +39,12 @@ $isUser = !$isGuest && !in_array(Yii::$app->authManager->getRole(User::AUTHOR), 
         </div>
         <?php if ($isUser): ?>
             <div class="card-footer d-flex align-items-center justify-content-between">
-                <?= Html::input('text', 'countInput[' . $model->id . ']', '1', ['class' => 'form-control count-input flex-grow-1 me-2', 'data-id' => $model->id, 'placeholder' => 'Enter count', 'min' => 1, 'max' => 10]) ?>
+                <?= Html::input('text', 'countInput[' . $model->_id . ']', '1', ['class' => 'form-control count-input flex-grow-1 me-2', 'data-id' => $model->_id, 'placeholder' => 'Enter count', 'min' => 1, 'max' => 10]) ?>
                 <?= Html::tag('span', '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 448 512"><path fill="#28a745" d="M256 80c-17.7 0-32 14.3-32 32v112H112c-17.7 0-32 14.3-32 32s14.3 32 32 32h112v112c0 17.7 14.3 32 32 32s32-14.3 32-32V288h112c17.7 0 32-14.3 32-32s-14.3-32-32-32H288V112c0-17.7-14.3-32-32-32z"/></svg>', [
                     'title' => Yii::t('yii', 'Add to Cart'),
-                    'class' => 'cursor-pointer book-to-cart add-to-cart-' . $model->id,
-                    'data-id' => $model->id,
-                    'onclick' => 'addToCart(' . $model->id . ')',
+                    'class' => 'cursor-pointer book-to-cart add-to-cart-' . $model->_id,
+                    'data-id' => $model->_id,
+                    'onclick' => 'addToCart("' . $model->_id . '")',
                 ]); ?>
             </div>
         <?php endif; ?>
