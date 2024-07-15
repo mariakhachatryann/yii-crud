@@ -6,7 +6,7 @@ use yii\widgets\ListView;
 
 
 /** @var View $this */
-/** @var app\models\BookSearch $searchModel */
+/** @var app\models\ElasticSearchBookSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 /** @var bool $isGuest */
 

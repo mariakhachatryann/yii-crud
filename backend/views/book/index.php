@@ -7,7 +7,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\models\BookSearch $searchModel */
+/** @var app\models\ElasticSearchBookSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Books';
@@ -46,9 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <p class="card-text"><strong>Price:</strong> $<?= Html::encode($model->price) ?></p>
                     </div>
                     <div class="card-footer">
-                        <?= Html::a('View Details', ['view', 'id' => $model->_id], ['class' => 'btn btn-primary']) ?>
-                        <?= Html::a('Update', ['update', 'id' => $model->_id], ['class' => 'btn btn-secondary']) ?>
-                        <?= Html::a('Delete', ['delete', 'id' => $model->_id], [
+                        <?= Html::a('View Details', ['view', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-secondary']) ?>
+                        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
                             'class' => 'btn btn-danger',
                             'data' => [
                                 'confirm' => 'Are you sure you want to delete this item?',

@@ -2,9 +2,10 @@
 
 namespace common\helpers;
 
-use app\models\BookSearch;
+use app\models\ElasticSearchBookSearch;
 use common\models\Author;
 use common\models\Book;
+use common\models\ElasticBookSearch;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use Yii;
@@ -14,7 +15,7 @@ class BookCrudActions extends \yii\web\Controller
     public function actionIndex()
     {
 
-        $searchModel = new BookSearch();
+        $searchModel = new ElasticSearchBookSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -71,7 +72,7 @@ class BookCrudActions extends \yii\web\Controller
                     }
 
                     Yii::$app->session->setFlash('success', 'Book created successfully.');
-                    return $this->redirect(['view', 'id' => $model->_id]);
+                    return $this->redirect(['view', 'id' => $model->id]);
                 } else {
                     Yii::$app->session->setFlash('error', 'Failed to save book.');
                 }
@@ -133,6 +134,7 @@ class BookCrudActions extends \yii\web\Controller
             'model' => $model,
         ]);
     }
+
     /**
      * Deletes an existing Book model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -142,7 +144,11 @@ class BookCrudActions extends \yii\web\Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $book = $this->findModel($id);
+
+        ElasticBookSearch::deleteBook($book);
+        $book->delete();
+
         return $this->redirect(['index']);
     }
 
@@ -155,7 +161,7 @@ class BookCrudActions extends \yii\web\Controller
      */
     protected function findModel($id)
     {
-        if (($model = Book::findOne(['_id' => $id])) !== null) {
+        if (($model = Book::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

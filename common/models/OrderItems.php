@@ -9,6 +9,7 @@ use yii\db\Transaction;
  * This is the model class for table "order_items".
  *
  * @property int $id
+ * @property int|null $book_id
  * @property int|null $order_id
  * @property int|null $quantity
  *
@@ -31,8 +32,8 @@ class OrderItems extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_id', 'quantity'], 'integer'],
-            [['book_id'], 'string', 'max' => 255],
+            [['book_id', 'order_id', 'quantity'], 'integer'],
+            [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::class, 'targetAttribute' => ['book_id' => 'id']],
             [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::class, 'targetAttribute' => ['order_id' => 'id']],
         ];
     }
@@ -55,6 +56,11 @@ class OrderItems extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
+    public function getBook()
+    {
+        return $this->hasOne(Book::class, ['id' => 'book_id']);
+    }
+
     /**
      * Gets query for [[Order]].
      *

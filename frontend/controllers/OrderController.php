@@ -46,16 +46,16 @@ class OrderController extends \yii\web\Controller
                 $orderTransaction = new OrderTransaction();
                 $orderTransaction->order_item_id = $orderItem->id;
 
-                $book = Book::findOne(['_id' => $orderItem->book_id]);
+                $book = Book::findOne(['id' => $orderItem->book_id]);
                 $orderTransaction->amount = $book->price * $orderItem->quantity;
                 $orderTransaction->save();
 
                 $cartItem->delete();
 
-//                $authors = $orderItem->book->getAuthors()->all();
-//                foreach ($authors as $author) {
-//                    $author->updateBalance();
-//                }
+                $authors = $orderItem->book->getAuthors()->all();
+                foreach ($authors as $author) {
+                    $author->updateBalance();
+                }
             }
 
             $orderAddress->order_id = $order->id;

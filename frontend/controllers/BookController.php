@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\Book;
+use common\models\ElasticBookSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
@@ -41,7 +42,7 @@ class BookController extends \yii\web\Controller
     public function actionSearch()
     {
         $title = Yii::$app->request->get('title');
-        $results = Book::find()->query(['match' => ['title' => $title]])->all();
+        $results = ElasticBookSearch::find()->query(['match' => ['title' => $title]])->all();
         $dataProvider = new \yii\data\ArrayDataProvider([
             'allModels' => $results,
             'pagination' => [

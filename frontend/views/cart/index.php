@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if ($dataProvider->totalCount > 0): ?>
         <div class="row">
             <?php foreach ($dataProvider->getModels() as $model): ?>
-                <?php $book = Book::findOne(['_id' => $model->book_id]); ?>
+                <?php $book = Book::findOne(['id' => $model->book_id]); ?>
 
                 <?php if ($book): ?>
                     <div class="col-md-6 mb-4">

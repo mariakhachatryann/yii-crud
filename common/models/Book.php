@@ -16,43 +16,12 @@ use yii\helpers\ArrayHelper;
  * @property int|null $created_at
  * @property int|null $updated_at
  */
-class Book extends \yii\elasticsearch\ActiveRecord
+class Book extends \yii\db\ActiveRecord
 {
     public $authorsIds;
     /**
      * {@inheritdoc}
      */
-    public static function indexName()
-    {
-        return 'books';
-    }
-
-    public static function typeName()
-    {
-        return '_doc';
-    }
-
-    public static function mapping()
-    {
-        return [
-            static::type() => [
-                'properties' => [
-                    'id' => ['type' => 'text'],
-                    'title' => ['type' => 'text'],
-                    'description' => ['type' => 'text'],
-                    'publication_year' => ['type' => 'integer'],
-                    'authors' => [
-                        'type' => 'nested',
-                        'properties' => [
-                            'id' => ['type' => 'integer'],
-                            'name' => ['type' => 'keyword'],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-    }
-
     public static function tableName()
     {
         return 'books';
@@ -90,21 +59,6 @@ class Book extends \yii\elasticsearch\ActiveRecord
         ];
     }
 
-    public function attributes()
-    {
-        return [
-            'id',
-            'title',
-            'description',
-            'publication_year',
-            'price',
-            'created_at',
-            'updated_at',
-            'imageFile',
-            'authorsIds',
-        ];
-    }
-
     public function getAuthorBook()
     {
         return $this->hasMany(AuthorBook::class, ['book_id' => 'id']);
@@ -114,5 +68,11 @@ class Book extends \yii\elasticsearch\ActiveRecord
     {
         return $this->hasMany(Author::class, ['id' => 'author_id'])
             ->via('authorBook');
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        ElasticBookSearch::indexBook($this);
     }
 }

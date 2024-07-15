@@ -34,12 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'first_name',
             'last_name',
             'biography:ntext',
-            [
-                'attribute' => 'Books',
-                'value' => function ($model) {
-                    return implode(', ', ArrayHelper::getColumn($model->books, 'title'));
-                },
-            ],
+//            [
+//                'attribute' => 'Books',
+//                'value' => function ($model) {
+//                    return implode(', ', ArrayHelper::getColumn($model->books, 'title'));
+//                },
+//            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Author $model, $key, $index, $column) {

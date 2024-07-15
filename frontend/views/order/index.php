@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h5 class="card-title">Ordered Items:</h5>
                 <ul class="list-group list-group-flush">
                     <?php foreach ($order->orderItems as $item): ?>
-                        <?php $book = Book::findOne(['_id' => $item->book_id]); ?>
+                        <?php $book = Book::findOne(['id' => $item->book_id]); ?>
 
                         <li class="list-group-item">
                             <div class="row">
